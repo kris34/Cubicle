@@ -1,4 +1,5 @@
 const Hotel = require('../models/Hotel');
+const User = require('../models/User');
 
 async function getAll() {
   return Hotel.find({}).lean();
@@ -24,9 +25,20 @@ async function update(id, hotel) {
   await existing.save();
 }
 
-async function deleteById(id) {}
+async function deleteById(id) {
+  await Hotel.findByIdAndRemove(id);
+}
 
-async function bookRoom(hotelId, userId) {}
+async function bookRoom(hotelId, userId) {
+  const hotel = await Hotel.findById(hotelId);
+
+  if (hotel.bookings.includes(userId)) {
+    throw new Error('Cannot book twice!');
+  }
+
+  hotel.bookings.push(userId);
+  await hotel.save();
+}
 
 module.exports = {
   getAll,
