@@ -40,6 +40,10 @@ async function bookRoom(hotelId, userId) {
   await hotel.save();
 }
 
+async function getByUserBooking(userId) {
+  return Hotel.find({ bookings: userId }).lean();
+}
+
 module.exports = {
   getAll,
   getById,
@@ -47,4 +51,5 @@ module.exports = {
   bookRoom,
   deleteById,
   update,
+  getByUserBooking
 };
